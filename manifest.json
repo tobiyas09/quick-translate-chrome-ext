@@ -1,0 +1,11 @@
+{
+  "name": "Quick translate",
+  "version": "1.0.0",
+  "description": "Quick google translate",
+  "manifest_version": 3,
+  "author": "Tomislav",
+  "action":{
+      "default_popup": "index.html",
+      "default_title": "Translate"
+  }
+}

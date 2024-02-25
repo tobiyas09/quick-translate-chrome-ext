@@ -1,0 +1,22 @@
+.main {
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+input {
+  border-color: 'transparent';
+  border: 1px solid #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+label {
+  font-size: 12px;
+  color: #1967d2;
+}
+
+.target-input {
+  background-color: #f5f5f5;
+}
