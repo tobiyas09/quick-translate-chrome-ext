@@ -9,12 +9,16 @@
 </head>
 <body>
     <div class="main" style="width: auto;">
-        <!-- <h2 class="text-center">Quick Translate</h2> -->
-        <label>EN</label> 
-        <input id="origin" autocomplete="off"/>
-        <label style="margin-top: 8px;">HR</label> 
+        <select id="source-language">
+            <!-- Script -->
+        <select/>
+        <label id="source-label" for="source-label">EN</label> 
+        <input id="source" autocomplete="off"/>
+        <select id="target-language">
+            <!-- Script -->
+            <select/>
+        <label id="target-label" for="target-language">HR</label> 
         <input id="target" class="target-input" autocomplete="off"/>
-        <!-- <button id="translate-button">Translate</button>  -->
     </div>
 </body>
 <script src="script.js"></script>

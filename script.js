@@ -1,45 +1,110 @@
-const originInput = document.getElementById('origin')
+const sourceInput = document.getElementById('source')
 const targetInput = document.getElementById('target')
+const LANGUAGES  = [
+  { code: 'ar', name: 'Arabic' },
+  { code: 'az', name: 'Azerbaijani' },
+  { code: 'bn', name: 'Bengali' },
+  { code: 'ceb', name: 'Cebuano' },
+  { code: 'cs', name: 'Czech' },
+  { code: 'hr', name: 'Croatian' },
+  { code: 'de', name: 'German' },
+  { code: 'el', name: 'Greek' },
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Spanish' },
+  { code: 'fa', name: 'Persian' },
+  { code: 'fil', name: 'Filipino' },
+  { code: 'fr', name: 'French' },
+  { code: 'gu', name: 'Gujarati' },
+  { code: 'ha', name: 'Hausa' },
+  { code: 'hi', name: 'Hindi' },
+  { code: 'hu', name: 'Hungarian' },
+  { code: 'it', name: 'Italian' },
+  { code: 'ja', name: 'Japanese' },
+  { code: 'jv', name: 'Javanese' },
+  { code: 'kannada', name: 'Kannada' },
+  { code: 'ko', name: 'Korean' },
+  { code: 'mr', name: 'Marathi' },
+  { code: 'ms', name: 'Malay' },
+  { code: 'my', name: 'Burmese' },
+  { code: 'nl', name: 'Dutch' },
+  { code: 'no', name: 'Norwegian' },
+  { code: 'pa', name: 'Punjabi' },
+  { code: 'pl', name: 'Polish' },
+  { code: 'pt', name: 'Portuguese' },
+  { code: 'ro', name: 'Romanian' },
+  { code: 'ru', name: 'Russian' },
+  { code: 'sv', name: 'Swedish' },
+  { code: 'ta', name: 'Tamil' },
+  { code: 'te', name: 'Telugu' },
+  { code: 'th', name: 'Thai' },
+  { code: 'tr', name: 'Turkish' },
+  { code: 'uk', name: 'Ukrainian' },
+  { code: 'ur', name: 'Urdu' },
+  { code: 'uz', name: 'Uzbek' },
+  { code: 'vi', name: 'Vietnamese' },
+  { code: 'zh-CN', name: 'Chinese (Simplified)' },
+  { code: 'zh-TW', name: 'Chinese (Traditional)' }
+];
 
-async function onOriginChange() {
-  const inputText = originInput.value;
-  // Replace 'en' and 'hr' with the desired source and target languages
-  const sourceLanguage = 'en';
-  const targetLanguage = 'hr';
-  
-  // Use Google Translate API to translate the text
+
+async function onSourceChange() {
+  const inputText = sourceInput.value;  
+  const sourceLanguage = document.getElementById('source-language').value;
+  const targetLanguage = document.getElementById('target-language').value;
+
   const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLanguage}&tl=${targetLanguage}&dt=t&q=${inputText}`;
-
   fetch(apiUrl)
   .then(response => response.json())
   .then(data => {
-      // Update the content of the element with the translated text
-      console.log(data)
       targetInput.value =  data[0][0][0];
   })
   .catch(error => console.error('Error:', error));
 }
 
-
 async function onTargetChange() {
   const inputText = targetInput.value;
-
-  const sourceLanguage = 'hr';
-  const targetLanguage = 'en';
+  const sourceLanguage = document.getElementById('target-language').value;
+  const targetLanguage = document.getElementById('source-language').value;
   
-  // Use Google Translate API to translate the text
+  console.log(sourceLanguage, targetLanguage)
   const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLanguage}&tl=${targetLanguage}&dt=t&q=${inputText}`;
-
   fetch(apiUrl)
   .then(response => response.json())
   .then(data => {
-      // Update the content of the element with the translated text
-      originInput.value =  data[0][0][0];
+      sourceInput.value =  data[0][0][0];
   })
   .catch(error => console.error('Error:', error));
 }
 
+function populateLanguageOptions() {
+  const selectElement = document.getElementById('source-language');
+  const targetElement = document.getElementById('target-language');
 
+  LANGUAGES.forEach((language) => {
+    const sourceOption = document.createElement('option')
+    const targetOption = document.createElement('option')
+    sourceOption.value = language.code
+    sourceOption.textContent = language.name 
+    targetOption.value = language.code
+    targetOption.textContent = language.name
+    selectElement.appendChild(sourceOption)
+    targetElement.appendChild(targetOption)
+  })
 
-document.getElementById('origin').addEventListener('change', onOriginChange)
+  selectElement.value = 'en'
+  targetElement.value = 'hr'
+}
+
+function onSourceOptionChange() {
+  document.getElementById('source-label').textContent = document.getElementById('source-language').value.toUpperCase()
+}
+function onTargerOptionChange() {
+  document.getElementById('target-label').textContent = document.getElementById('target-language').value.toUpperCase()
+}
+
+populateLanguageOptions()
+document.getElementById('source').addEventListener('change', onSourceChange)
+document.getElementById('target').addEventListener('change', onTargetChange)
+document.getElementById('source-language').addEventListener('change', onSourceOptionChange)
+document.getElementById('target-language').addEventListener('change', onTargerOptionChange)
 document.getElementById('target').addEventListener('change', onTargetChange)
