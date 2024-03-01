@@ -48,12 +48,22 @@ const LANGUAGES  = [
 let sourceInFocus = false;
 let targetInFocus = false;
 
+function debounce(func, timeout = 200){
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
+
 async function onSourceChange() {
-  if (!sourceInFocus) {
+  const inputText = sourceInput.value.trim();  
+  if (!sourceInFocus || inputText.length === 0) {
+    targetInput.value = '';
     return;
   }
-
-  const inputText = sourceInput.value;  
+  
+  console.log(inputText)
   const sourceLanguage = document.getElementById('source-language').value;
   const targetLanguage = document.getElementById('target-language').value;
 
@@ -67,10 +77,12 @@ async function onSourceChange() {
 }
 
 async function onTargetChange() {
-  if (!targetInFocus) {
+  const inputText = targetInput.value;
+  if (!targetInFocus || inputText.length ===0) {
+    sourceInput.value = '';
     return;
   }
- const inputText = targetInput.value;
+
   const sourceLanguage = document.getElementById('target-language').value;
   const targetLanguage = document.getElementById('source-language').value;
   
@@ -110,22 +122,27 @@ function onTargerOptionChange() {
   document.getElementById('target-label').textContent = document.getElementById('target-language').value.toUpperCase()
 }
 
+const debounceOnSourceChange = debounce(() => onSourceChange());
+const debounceOnTargetChange = debounce(() => onTargetChange());
+
 populateLanguageOptions()
-document.getElementById('source').addEventListener('change', onSourceChange)
+document.getElementById('source').addEventListener('change', debounceOnSourceChange)
 document.getElementById('source').addEventListener('focus', () => {
   sourceInFocus = true;
 })
 document.getElementById('source').addEventListener('blur', () => {
   sourceInFocus = false;
 })
+document.getElementById('source').addEventListener('keyup', debounceOnSourceChange)
 
-document.getElementById('target').addEventListener('change', onTargetChange)
+document.getElementById('target').addEventListener('change', debounceOnTargetChange)
 document.getElementById('target').addEventListener('focus', () => {
   targetInFocus = true;
 })
 document.getElementById('target').addEventListener('blur', () => {
   targetInFocus = false;
 })
+document.getElementById('target').addEventListener('keyup', debounceOnTargetChange)
 
 
 document.getElementById('source-language').addEventListener('change', onSourceOptionChange)
