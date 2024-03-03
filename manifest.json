@@ -7,5 +7,11 @@
   "action":{
       "default_popup": "index.html",
       "default_title": "Translate"
+  },
+  "icons": {
+    "128": "128.png",
+    "96": "96.png",
+    "72": "72.png",
+    "48": "48.png"
   }
 }
