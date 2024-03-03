@@ -56,44 +56,48 @@ function debounce(func, timeout = 200){
   };
 }
 
+async function translate(src, trgt, text) {
+  try {
+    const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${src}&tl=${trgt}&dt=t&q=${text}`;
+    const data = await fetch(apiUrl);
+    const value = await data.json();
+    return value[0][0][0]
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 async function onSourceChange() {
   const inputText = sourceInput.value.trim();  
-  if (!sourceInFocus || inputText.length === 0) {
-    targetInput.value = '';
+  if (!sourceInFocus ) {
+    return;
+  }
+  if (inputText.length === 0) {
+    targetInput.value = ''
     return;
   }
   
-  console.log(inputText)
   const sourceLanguage = document.getElementById('source-language').value;
   const targetLanguage = document.getElementById('target-language').value;
+  const text = await translate(sourceLanguage, targetLanguage, inputText)
+  targetInput.value = text;
 
-  const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLanguage}&tl=${targetLanguage}&dt=t&q=${inputText}`;
-  fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-      targetInput.value =  data[0][0][0];
-  })
-  .catch(error => console.error('Error:', error));
 }
 
 async function onTargetChange() {
-  const inputText = targetInput.value;
-  if (!targetInFocus || inputText.length ===0) {
+  const inputText = targetInput.value.trim();
+  if (!targetInFocus) {
+    return;
+  }
+  if (inputText.length === 0) {
     sourceInput.value = '';
     return;
   }
 
   const sourceLanguage = document.getElementById('target-language').value;
   const targetLanguage = document.getElementById('source-language').value;
-  
-  console.log(sourceLanguage, targetLanguage)
-  const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLanguage}&tl=${targetLanguage}&dt=t&q=${inputText}`;
-  fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-      sourceInput.value =  data[0][0][0];
-  })
-  .catch(error => console.error('Error:', error));
+  const text = await translate(sourceLanguage, targetLanguage, inputText)
+  sourceInput.value = text;
 }
 
 function populateLanguageOptions() {
@@ -115,11 +119,22 @@ function populateLanguageOptions() {
   targetElement.value = 'hr'
 }
 
-function onSourceOptionChange() {
+async function onSourceOptionChange() {
   document.getElementById('source-label').textContent = document.getElementById('source-language').value.toUpperCase()
+  const inputText = targetInput.value.trim();
+  const sourceLanguage = document.getElementById('target-language').value;
+  const targetLanguage = document.getElementById('source-language').value;
+  const text = await translate(sourceLanguage, targetLanguage, inputText)
+  sourceInput.value = text;
 }
-function onTargerOptionChange() {
+async function onTargerOptionChange() {
   document.getElementById('target-label').textContent = document.getElementById('target-language').value.toUpperCase()
+
+  const inputText = sourceInput.value.trim();  
+  const sourceLanguage = document.getElementById('source-language').value;
+  const targetLanguage = document.getElementById('target-language').value;
+  const text = await translate(sourceLanguage, targetLanguage, inputText)
+  targetInput.value = text;
 }
 
 const debounceOnSourceChange = debounce(() => onSourceChange());
