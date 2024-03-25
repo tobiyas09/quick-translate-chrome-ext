@@ -122,6 +122,9 @@ function populateLanguageOptions() {
 async function onSourceOptionChange() {
   document.getElementById('source-label').textContent = document.getElementById('source-language').value.toUpperCase()
   const inputText = targetInput.value.trim();
+  if (inputText.length === 0) {
+    return;
+  }
   const sourceLanguage = document.getElementById('target-language').value;
   const targetLanguage = document.getElementById('source-language').value;
   const text = await translate(sourceLanguage, targetLanguage, inputText)
@@ -129,8 +132,10 @@ async function onSourceOptionChange() {
 }
 async function onTargerOptionChange() {
   document.getElementById('target-label').textContent = document.getElementById('target-language').value.toUpperCase()
-
   const inputText = sourceInput.value.trim();  
+  if (inputText.length === 0) {
+    return;
+  }
   const sourceLanguage = document.getElementById('source-language').value;
   const targetLanguage = document.getElementById('target-language').value;
   const text = await translate(sourceLanguage, targetLanguage, inputText)
